@@ -41,4 +41,47 @@ export default class RestaurantController {
 
     res.json(response)
   }
+
+  /**
+   * Get restaurant by id along with the reviews
+   *
+   * @param {object} req Request Object
+   * @param {Object} res Response Object
+   * @param {object} next
+   */
+  static async apiGetRestaurantById (req, res, next) {
+    try {
+      const id = req.params.id || {}
+      const restaurant = await RestaurantsDAO.getRestaurantById(id)
+
+      if (!restaurant) {
+        res.status(404).json({ error: 'Restaurant Not Found' })
+
+        return
+      }
+
+      res.json(restaurant)
+    } catch (e) {
+      console.log(`api, ${e}`)
+      res.status(500).json({ error: e })
+    }
+  }
+
+  /**
+   * Get all cuisines
+   *
+   * @param {object} req Request Object
+   * @param {Object} res Response Object
+   * @param {object} next
+   */
+  static async apiGetRestaurantCuisines (req, res, next) {
+    try {
+      const cuisines = await RestaurantsDAO.getCuisines()
+
+      res.json(cuisines)
+    } catch (e) {
+      console.log(`api, ${e}`)
+      res.status(500).json({ error: e })
+    }
+  }
 }
